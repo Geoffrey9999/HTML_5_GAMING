@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="super_mario" tilewidth="16" tileheight="16" tilecount="44" columns="11">
+  <image source="super_mario.png" width="176" height="64"/>
+ </tileset>
+ <tileset firstgid="45" name="SuperMarioBros-World1-1" tilewidth="16" tileheight="16" tilecount="3180" columns="212">
+  <image source="SuperMarioBros-World1-1.png" width="3392" height="240"/>
+ </tileset>
+ <layer name="world1" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt00sOQDAUheEWoTEzNUCE1VmQVWILzlBEB6q3TeUMvmFv8/ehlVKaKDEZ5FAkNvuuhApM4NkhG1M9P6KY+Efpr9oAe6yV7PwOehiEOxYj2zBeSLdY30Ptr8FHS+OwZkPDDodDi63ha8tTxwRzpHumd044iQvd
+  </data>
+ </layer>
+ <layer name="collides" width="50" height="20" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzzsOgkAURuHb8Sig4GEhewF0O+J6kA2quAlPIYkWTDRgEPOf5GtmJpN7zZRSSimllPqfWs/shM5bepJpHXyzBkf/9Tx6+IUChI77kgcVauywD977N0M+w3xzlbBkigw5Nq6ln9qi+Opkn3Vm7guu6HFDbOOGXG/WYE173AEMUBA9
+  </data>
+ </layer>
+</map>
