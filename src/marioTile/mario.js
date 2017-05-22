@@ -1,20 +1,20 @@
 window.onload = function() {
 
-    var game = new Phaser.Game(350, 520, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+    var game = new Phaser.Game(800, 450, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
     function preload() {
 
         game.load.tilemap('level1', 'src/marioTile/collide1.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('map1', 'src/marioTile/super_mario.png');
         game.load.image('map2', 'src/marioTile/SuperMarioBros-World1-1.png');
-        game.load.spritesheet('dude', 'assets/games/starstruck/dude.png', 32, 48);
+        game.load.spritesheet('mario', 'src/marioTile/mario_wjlfy5.png', 16, 16);
     }
 
     var map;
     var tileset;
     var layer;
     var player;
-    var facing = 'left';
+    var facing = 'right';
     var jumpTimer = 0;
     var cursors;
     var jumpButton;
@@ -33,26 +33,21 @@ window.onload = function() {
         layer = map.createLayer('world1');
         layer = map.createLayer('collides');
 
-        // layer.map.setCollisionByExclusion([ 13, 14, 15, 16, 40, 47, 48, 49, 50, 51 ], true);
-        layer.map.setCollision([15], true, layer);
+        layer.map.setCollision([14, 15, 20, 21, 22, 27, 28,833, 834, 2010 ,2011, 2031, 2583, 2628, 2646, 2723 ], true, layer);
 
-        // layer.debug = true;
-        // collision.debug = true;
+        layer.debug = true;
 
         layer.resizeWorld();
 
-        game.physics.arcade.gravity.y = 250;
+        game.physics.arcade.gravity.y = 110;
 
-        player = game.add.sprite(32, 32, 'dude');
-        game.physics.enable(player, Phaser.Physics.ARCADE);
-
-        player.body.bounce.y = 0.2;
+        player = game.add.sprite(16, game.world.height - 48, 'mario');
+        game.physics.arcade.enable(player);
+        player.body.gravity.y = 370;
         player.body.collideWorldBounds = true;
-        player.body.setSize(20, 32, 5, 16);
-
-        player.animations.add('left', [0, 1, 2, 3], 10, true);
-        player.animations.add('turn', [4], 20, true);
-        player.animations.add('right', [5, 6, 7, 8], 10, true);
+        player.animations.add('right', [1, 2, 3], 10, true);
+        player.animations.add('left', [8, 9, 10], 10, true);
+        // player.goesRight = true;
 
         game.camera.follow(player);
 
@@ -95,11 +90,11 @@ window.onload = function() {
 
                 if (facing == 'left')
                 {
-                    player.frame = 0;
+                    player.frame = 10;
                 }
                 else
                 {
-                    player.frame = 5;
+                    player.frame = 0;
                 }
 
                 facing = 'idle';
