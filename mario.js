@@ -5,12 +5,12 @@
     function preload() {
 
         game.load.tilemap('level1', 'assets/games/Mario/world1/world1.json', null, Phaser.Tilemap.TILED_JSON);
+
         game.load.image('map1', 'assets/games/Mario/world1/super_mario.png');
         game.load.image('map2', 'assets/games/Mario/world1/SuperMarioBros-World1-1.png');
         game.load.spritesheet('mario', 'assets/games/Mario/sprite/mario_wjlfy5.png', 16, 16);
-        // game.load.spritesheet('goomba_png', 'assets/games/Mario/ennemies/gombas.png', 16, 16);
+        game.load.spritesheet('goomba_png', 'assets/games/Mario/ennemies/gombas.png', 16, 16);
         game.load.spritesheet('coin_png', 'assets/games/Mario/events/coins.png', 16, 16);
-
     }
 
     var map;
@@ -21,8 +21,6 @@
     var jumpTimer = 0;
     var cursors;
     var jumpButton;
-    // var goombas;
-    // var coins;
 
     function create() {
 
@@ -37,12 +35,12 @@
 
         map.addTilesetImage('super_mario', 'map1');
         map.addTilesetImage('SuperMarioBros-World1-1', 'map2');
-        // map.addTilesetImage('tiles_dctsfk', 'goomba_png');
+        map.addTilesetImage('tiles_dctsfk', 'goomba_png');
         map.addTilesetImage('tiles_dctsfk', 'coin_png');
 
         layer = map.createLayer('world1');
         layer = map.createLayer('collides');
-        // stuff = map.createLayer('events');
+        // events = map.createLayer('events');
         // coins = map.createLayer('stuff');
 
         layer.map.setCollision([14, 15, 20, 21, 22, 27, 28,833, 834, 2010 ,2011, 2031, 2583, 2628, 2646, 2723], true, layer);
@@ -55,20 +53,19 @@
 
         // COINS
         coins = game.add.group();
-        // coins.enableBody = false;
         map.createFromTiles(3226, null, 'coin_png', 'stuff', coins);
         coins.callAll('animations.add', 'animations', 'spin', [0, 0, 1, 2], 3, true);
         coins.callAll('animations.play', 'animations', 'spin');
 
         // GOMBAS
-        // goombas = game.add.group();
-        // goombas.enableBody = true;
-        // map.createFromTiles(1, null, 'goomba_png', 'events', goombas);
-        // goombas.callAll('animations.add', 'animations', 'walk', [0, 1], 2, true);
-        // goombas.callAll('animations.play', 'animations', 'walk');
-        // goombas.setAll('body.bounce.x', 1);
-        // goombas.setAll('body.velocity.x', -20);
-        // goombas.setAll('body.gravity.y', 500);
+        goombas = game.add.group();
+        goombas.enableBody = true;
+        map.createFromTiles(3225, null, 'goomba_png', 'events', goombas);
+        goombas.callAll('animations.add', 'animations', 'walk', [0, 1], 2, true);
+        goombas.callAll('animations.play', 'animations', 'walk');
+        goombas.setAll('body.bounce.x', 1);
+        goombas.setAll('body.velocity.x', -20);
+        goombas.setAll('body.gravity.y', 500);
 
         game.physics.arcade.gravity.y = 110;
 
@@ -89,6 +86,7 @@
     function update() {
 
         game.physics.arcade.collide(player, layer);
+        game.physics.arcade.collide(goombas, layer);
         // game.physics.arcade.overlap(player, coins, coinOverlap);
         // game.physics.arcade.collide(player, events);
 
