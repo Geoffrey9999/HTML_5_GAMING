@@ -57,8 +57,8 @@
                  "type":"",
                  "visible":true,
                  "width":17.3333333333335,
-                 "x":1486.66666666667,
-                 "y":254.666666666667
+                 "x":1487.33333333334,
+                 "y":287.333333333334
                 }, 
                 {
                  "height":31.3333333333333,
@@ -81,6 +81,17 @@
                  "width":29.3333333333333,
                  "x":609.333333333333,
                  "y":348.666666666667
+                }, 
+                {
+                 "height":32.6666666666667,
+                 "id":21,
+                 "name":"endMap",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":17.3333333333335,
+                 "x":58,
+                 "y":290.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -89,7 +100,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":21,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":16,
