@@ -52,7 +52,7 @@
                 {
                  "height":32.6666666666667,
                  "id":3,
-                 "name":"endMap",
+                 "name":"finish",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -84,14 +84,14 @@
                 }, 
                 {
                  "height":32.6666666666667,
-                 "id":21,
-                 "name":"endMap",
+                 "id":22,
+                 "name":"finish",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":17.3333333333335,
-                 "x":58,
-                 "y":290.666666666667
+                 "x":60.6666666666702,
+                 "y":260.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -100,7 +100,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":22,
+ "nextobjectid":23,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":16,

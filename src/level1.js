@@ -1,22 +1,3 @@
-var game = new Phaser.Game(800, 450, Phaser.CANVAS, 'Mario', { preload: preload, create: create, update: update, render: render });
-
-game.state.add("boot", boot);
-game.state.add("preload", preload);
-
-game.state.start('boot');
-
-function preload() {
-
-    game.load.tilemap('level1', 'assets/games/Mario/world1/world1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('map1', 'assets/games/Mario/world1/super_mario.png');
-    game.load.image('map2', 'assets/games/Mario/world1/SuperMarioBros-World1-1.png');
-    game.load.spritesheet('mario', 'assets/games/Mario/sprite/mario_wjlfy5.png', 16, 16);
-    game.load.spritesheet('goomba_png', 'assets/games/Mario/ennemies/gombas.png', 16, 16);
-    game.load.spritesheet('coin_png', 'assets/games/Mario/events/coins.png', 16, 16);
-
-    // game.load.script('boss1', './src/boss1.js');
-}
-
 var map;
 var tileset;
 var layer;
@@ -24,174 +5,170 @@ var player;
 var facing = 'right';
 var jumpTimer = 0;
 var cursors;
-var jumpButton;
 
-function create() {
+var level1 = {
 
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    create: function() {
 
-    game.stage.backgroundColor = '#5c94fc';
-    game.scale.pageAlignHorizontally = true;
-    game.scale.pageAlignVertically = true
-    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        game.stage.backgroundColor = '#5c94fc';
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-    map = game.add.tilemap('level1');
+        map = game.add.tilemap('level1');
 
-    map.addTilesetImage('super_mario', 'map1');
-    map.addTilesetImage('SuperMarioBros-World1-1', 'map2');
-    map.addTilesetImage('tiles_dctsfk', 'goomba_png');
-    map.addTilesetImage('tiles_dctsfk', 'coin_png');
+        map.addTilesetImage('super_mario', 'map1');
+        map.addTilesetImage('SuperMarioBros-World1-1', 'map2');
+        map.addTilesetImage('tiles_dctsfk', 'goomba_png');
+        map.addTilesetImage('tiles_dctsfk', 'coin_png');
 
-    layer = map.createLayer('world1');
-    layer = map.createLayer('collides');
+        layer = map.createLayer('world1');
+        layer = map.createLayer('collides');
 
-    layer.map.setCollision([14, 15, 20, 21, 22, 27, 28,833, 834, 2010 ,2011, 2031, 2583, 2628, 2646, 2723], true, layer);
-    layer.resizeWorld();
+        layer.map.setCollision([14, 15, 20, 21, 22, 27, 28,833, 834, 2010 ,2011, 2031, 2583, 2628, 2646, 2723], true, layer);
+        layer.resizeWorld();
 
-    // layer.debug = true;
+        // layer.debug = true;
 
-    // HOLES
-    holes = game.add.group();
-    holes.enableBody = true;
-    map.createFromObjects('end', 'hole', 0, 0, true, false , holes);
-    holes.setAll('body.gravity', 0);
+        // HOLES
+        holes = game.add.group();
+        holes.enableBody = true;
+        map.createFromObjects('end', 'hole', 0, 0, true, false , holes);
+        holes.setAll('body.gravity', 0);
 
-    // END MAP
-    end = game.add.group();
-    end.enableBody = true;
-    map.createFromObjects('end', 'endMap', 1, 0, true, false, end);
-    end.setAll('body.gravity', 0);
+        // END MAP
+        end = game.add.group();
+        end.enableBody = true;
+        map.createFromObjects('end', 'finish', 1, 0, true, false, end);
+        end.setAll('body.gravity', 0);
 
 
-    // COINS
-    coins = game.add.group();
-    coins.enableBody = true;
-    map.createFromTiles(3226, null, 'coin_png', 'stuff', coins);
-    coins.callAll('animations.add', 'animations', 'spin', [0, 0, 1, 2], 3, true);
-    coins.callAll('animations.play', 'animations', 'spin');
-    coins.setAll('body.gravity', 0);
+        // COINS
+        coins = game.add.group();
+        coins.enableBody = true;
+        map.createFromTiles(3226, null, 'coin_png', 'stuff', coins);
+        coins.callAll('animations.add', 'animations', 'spin', [0, 0, 1, 2], 3, true);
+        coins.callAll('animations.play', 'animations', 'spin');
+        coins.setAll('body.gravity', 0);
 
-    // GOMBAS
-    goombas = game.add.group();
-    goombas.enableBody = true;
-    map.createFromTiles(3225, null, 'goomba_png', 'events', goombas);
-    goombas.callAll('animations.add', 'animations', 'walk', [0, 1], 2, true);
-    goombas.callAll('animations.play', 'animations', 'walk');
-    goombas.setAll('body.bounce.x', 1);
-    goombas.setAll('body.velocity.x', -20);
-    goombas.setAll('body.gravity.y', 500);
+        // GOMBAS
+        goombas = game.add.group();
+        goombas.enableBody = true;
+        map.createFromTiles(3225, null, 'goomba_png', 'events', goombas);
+        goombas.callAll('animations.add', 'animations', 'walk', [0, 1], 2, true);
+        goombas.callAll('animations.play', 'animations', 'walk');
+        goombas.setAll('body.bounce.x', 1);
+        goombas.setAll('body.velocity.x', -20);
+        goombas.setAll('body.gravity.y', 500);
 
-    game.physics.arcade.gravity.y = 110;
+        game.physics.arcade.gravity.y = 110;
 
-    // MARIO
-    player = game.add.sprite(16, game.world.height - 48, 'mario');
-    game.physics.arcade.enable(player);
-    player.body.gravity.y = 370;
-    player.body.collideWorldBounds = true;
-    player.animations.add('right', [1, 2, 3], 10, true);
-    player.animations.add('left', [8, 9, 10], 10, true);
+        // MARIO
+        player = game.add.sprite(16, game.world.height - 48, 'mario');
+        game.physics.arcade.enable(player);
+        player.body.gravity.y = 370;
+        player.body.collideWorldBounds = true;
+        player.animations.add('right', [1, 2, 3], 10, true);
+        player.animations.add('left', [8, 9, 10], 10, true);
 
-    game.camera.follow(player);
+        game.camera.follow(player);
 
-    cursors = game.input.keyboard.createCursorKeys();
-    // jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-}
+        cursors = game.input.keyboard.createCursorKeys();
 
-function update() {
+    },
 
-    game.physics.arcade.collide(player, layer);
-    game.physics.arcade.collide(goombas, layer);
-    game.physics.arcade.collide(coins, layer);
+    update: function() {
 
-    game.physics.arcade.overlap(player, goombas, goombaOverlap);
-    game.physics.arcade.overlap(player, coins, coinOverlap);
-    game.physics.arcade.overlap(player, holes, dead);
-    game.physics.arcade.overlap(player, end, stage);
+        game.physics.arcade.collide(player, layer);
+        game.physics.arcade.collide(goombas, layer);
+        game.physics.arcade.collide(coins, layer);
 
-    player.body.velocity.x = 0;
+        game.physics.arcade.overlap(player, goombas, goombaOverlap);
+        game.physics.arcade.overlap(player, coins, coinOverlap);
+        game.physics.arcade.overlap(player, holes, this.dead);
+        game.physics.arcade.overlap(player, end, this.finishLine);
 
-    if (cursors.left.isDown) {
-        player.body.velocity.x = -150;
+        player.body.velocity.x = 0;
 
-        if (facing != 'left'){
-            player.animations.play('left');
-            facing = 'left';
-        }
-    }
-    else if (cursors.right.isDown) {
-        player.body.velocity.x = 150;
+        if (cursors.left.isDown) {
+            player.body.velocity.x = -150;
 
-        if (facing != 'right') {
-            player.animations.play('right');
-            facing = 'right';
-        }
-    } else {
-        if (facing != 'idle') {
-            player.animations.stop();
-
-            if (facing == 'left') {
-                player.frame = 10;
-            } else {
-                player.frame = 0;
+            if (facing != 'left'){
+                player.animations.play('left');
+                facing = 'left';
             }
-
-            facing = 'idle';
         }
-    }
+        else if (cursors.right.isDown) {
+            player.body.velocity.x = 150;
 
-    if (cursors.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
-        player.body.velocity.y = -250;
-        jumpTimer = game.time.now + 750;
-    }
-}
+            if (facing != 'right') {
+                player.animations.play('right');
+                facing = 'right';
+            }
+        } else {
+            if (facing != 'idle') {
+                player.animations.stop();
 
-function coinOverlap(player, coin) {
-    coin.kill();
-}
+                if (facing == 'left') {
+                    player.frame = 10;
+                } else {
+                    player.frame = 0;
+                }
 
-function goombaOverlap(player, goomba) {
-    if (player.body.touching.down) {
-        goomba.animations.stop();
-        goomba.frame = 2;
-        goomba.body.enable = false;
-        player.body.velocity.y = -80;
-        game.time.events.add(Phaser.Timer.SECOND, function() {
-            goomba.kill();
-        });
-    } else {
-        player.frame = 6;
-        player.body.enable = false;
-        player.animations.stop();
-        game.time.events.add(Phaser.Timer.SECOND * 0, function() {
-            game.paused = true;
-        });
-    }
-}
+                facing = 'idle';
+            }
+        }
 
-function dead(player, holes) {
-    if (player.body.touching.down) {
-        player.frame = 6;
-        player.body.enable = false;
-        player.animations.stop();
-        game.time.events.add(Phaser.Timer.SECOND * 0, function() {
-            game.paused = true;
-        });
-    }
-}
+        if (cursors.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
+            player.body.velocity.y = -250;
+            jumpTimer = game.time.now + 750;
+        }
+    },
 
-function stage(player, end) {
-    // console.log('dans stage');
-    game.state.start('boss1');
+    coinOverlap: function(player, coin) {
+        coin.kill();
+    },
 
-    // console.log('dmljgdsmg');
-    // game.state.add("boss1", init);
-}
+    goombaOverlap: function(player, goomba) {
+        if (player.body.touching.down) {
+            goomba.animations.stop();
+            goomba.frame = 2;
+            goomba.body.enable = false;
+            player.body.velocity.y = -80;
+            game.time.events.add(Phaser.Timer.SECOND, function() {
+                goomba.kill();
+            });
+        } else {
+            player.frame = 6;
+            player.body.enable = false;
+            player.animations.stop();
+            game.time.events.add(Phaser.Timer.SECOND * 0, function() {
+                game.paused = true;
+            });
+        }
+    },
 
-function render () {
+    dead: function(player, holes) {
+        if (player.body.touching.down) {
+            player.frame = 6;
+            player.body.enable = false;
+            player.animations.stop();
+            game.time.events.add(Phaser.Timer.SECOND * 0, function() {
+                game.paused = true;
+            });
+        }
+    },
 
-    // game.debug.text(game.time.physicsElapsed, 32, 32);
-    // game.debug.body(player);
-    // game.debug.bodyInfo(end, 3, 400);
-    game.debug.bodyInfo(player, 3, 400);
+    finishLine: function(player, end) {
+        console.log('dans stage');
+    },
 
-}
+    render: function() {
+
+        // game.debug.text(game.time.physicsElapsed, 32, 32);
+        // game.debug.body(player);
+        // game.debug.bodyInfo(end, 3, 400);
+        game.debug.bodyInfo(player, 3, 400);
+
+    },
+};
