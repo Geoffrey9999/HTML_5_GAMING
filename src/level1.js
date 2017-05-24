@@ -83,8 +83,8 @@ var level1 = {
         game.physics.arcade.collide(goombas, layer);
         game.physics.arcade.collide(coins, layer);
 
-        game.physics.arcade.overlap(player, goombas, goombaOverlap);
-        game.physics.arcade.overlap(player, coins, coinOverlap);
+        game.physics.arcade.overlap(player, goombas, this.goombaOverlap);
+        game.physics.arcade.overlap(player, coins, this.coinOverlap);
         game.physics.arcade.overlap(player, holes, this.dead);
         game.physics.arcade.overlap(player, end, this.finishLine);
 
@@ -160,7 +160,7 @@ var level1 = {
     },
 
     finishLine: function(player, end) {
-        console.log('dans stage');
+        game.state.start('boss1');
     },
 
     render: function() {
