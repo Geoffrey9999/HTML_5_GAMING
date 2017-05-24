@@ -17,7 +17,6 @@ var boss1 = {
 
         this.map = game.add.tilemap('boss1');
 
-        // this.map.addTilesetImage('super_mario', 'map1');
         this.map.addTilesetImage('bowsers-castle', 'castle_png');
 
         this.layer = this.map.createLayer('background');
@@ -43,7 +42,7 @@ var boss1 = {
         cursors = game.input.keyboard.createCursorKeys();
 
         // BOWSER
-        bowser = game.add.sprite(160, game.world - 100, 'bowser');
+        bowser = game.add.sprite(860, game.world - 100, 'bowser');
         game.physics.arcade.enable(bowser);
         bowser.body.immovable = true;
         bowser.body.gravity.y = 570;
@@ -51,6 +50,15 @@ var boss1 = {
         bowser.body.collideWorldBounds = true;
         bowser.animations.add('breath', [1, 2]);
         bowser.animations.play('breath', 3, true);
+
+        // HAMMER
+        hammer = game.add.sprite(160, 0, 'hammer');
+        game.physics.arcade.enable(hammer);
+        hammer.animations.add('launch', [48]);
+        hammer.body.setSize(20, 20, 8, 8)
+        hammer.animations.play('launch', 3, true);
+        hammer.body.gravity.y = 570;
+        hammer.body.collideWorldBounds = true;
     },
 
     update: function() {
@@ -58,6 +66,7 @@ var boss1 = {
         game.physics.arcade.collide(bowser, this.layer);
         game.physics.arcade.collide(player, bowser, this.touch);
 
+        hammer.body.velocity.x = -150;
         player.body.velocity.x = 0;
 
         if (cursors.left.isDown) {
@@ -119,7 +128,8 @@ var boss1 = {
 
         // game.debug.text(game.time.physicsElapsed, 32, 32);
         // game.debug.body(player);
-        // game.debug.body(bowser)
+        game.debug.body(bowser)
+        game.debug.body(hammer)
         // game.debug.bodyInfo(end, 3, 400);
         game.debug.bodyInfo(player, 3, 400);
 
