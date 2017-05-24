@@ -43,12 +43,12 @@ function create() {
 
     // layer.debug = true;
 
-    end = game.add.group();
-    end.enableBody = true;
-    map.createFromObjects('end', 'start',  0, 0, true, false , end);
+    // HOLES
+    holes = game.add.group();
+    holes.enableBody = true;
+    map.createFromObjects('end', 'hole',  0, 0, true, false , holes);
     // end.setAll('body.immovale', true);
-    end.setAll('body.gravity', 0);
-    console.log(end)
+    holes.setAll('body.gravity', 0);
     // game.physics.enable(end, Phaser.Physics.ARCADE)
 
     layer.resizeWorld();
@@ -59,6 +59,7 @@ function create() {
     map.createFromTiles(3226, null, 'coin_png', 'stuff', coins);
     coins.callAll('animations.add', 'animations', 'spin', [0, 0, 1, 2], 3, true);
     coins.callAll('animations.play', 'animations', 'spin');
+    coins.setAll('body.gravity', 0);
 
     // GOMBAS
     goombas = game.add.group();
@@ -94,7 +95,7 @@ function update() {
 
     game.physics.arcade.overlap(player, goombas, goombaOverlap);
     game.physics.arcade.overlap(player, coins, coinOverlap);
-    game.physics.arcade.overlap(player, end, totoTest);
+    game.physics.arcade.overlap(player, holes, dead);
 
     player.body.velocity.x = 0;
 
@@ -156,8 +157,15 @@ function goombaOverlap(player, goomba) {
     }
 }
 
-function totoTest(player, end){
-    console.log('Hello World');
+function dead(player, holes){
+    if (player.body.touching.down) {
+        player.frame = 6;
+        player.body.enable = false;
+        player.animations.stop();
+        game.time.events.add(Phaser.Timer.SECOND * 0, function() {
+            game.paused = true;
+        });
+    }
 }
 
 function render () {
