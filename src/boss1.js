@@ -1,6 +1,3 @@
-var map;
-var tileset;
-var layer;
 var player;
 var facing = 'right';
 var jumpTimer = 0;
@@ -10,6 +7,8 @@ var end = true;
 var flame = null;
 var music;
 var die;
+var score = 0;
+var scoreText;
 
 var boss1 = {
 
@@ -44,8 +43,11 @@ var boss1 = {
         player.animations.add('left', [8, 9, 10], 10, true);
 
         game.camera.follow(player);
-
         cursors = game.input.keyboard.createCursorKeys();
+
+        // SCORE
+        scoreText = game.add.text(0, 0, 'score: 0', { fontSize: '12px', fill: '#000' });
+        scoreText.fixedToCamera = true;
 
         // BOWSER
         bowser = game.add.sprite(860, game.world - 100, 'bowser');
@@ -161,6 +163,8 @@ var boss1 = {
             bowser.body.setSize(32, 20, 8, 20)
             bowser.body.velocity.y = -80;
             game.time.events.add(Phaser.Timer.SECOND * 5, function() {
+                score += 10;
+                scoreText.text = 'Score: ' + score;
                 game.sound.stopAll();
                 bowser.kill();
                 game.state.start('level1');
@@ -187,6 +191,12 @@ var boss1 = {
         player.animations.stop();
         game.time.events.add(Phaser.Timer.SECOND * 0, function() {
             game.paused = true;
+            die.play();
+            setTimeout(function(){
+                music.volume = 0;
+                game.paused = false;
+                game.state.restart();
+            }, 3500)
         });
     },
 

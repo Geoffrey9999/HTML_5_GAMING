@@ -12,22 +12,17 @@ var score = 0;
 var scoreText;
 var star = [];
 var i = 0;
-var gameOver
+var gameOver;
 var die;
-// var pause_label;
-// var again;
-// var menu;
-// var continues;
 
 var level1 = {
 
     create: function() {
-        game.sound.play('main', true);
-        // game.events.onBloomOver = new Phaser.Signal();
 
+        game.sound.play('main', true);
         game.stage.backgroundColor = '#5c94fc';
         game.scale.pageAlignHorizontally = true;
-        game.scale.pageAlignVertically = true
+        game.scale.pageAlignVertically = true;
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         map = game.add.tilemap('level1');
@@ -42,8 +37,6 @@ var level1 = {
 
         layer.map.setCollision([14, 15, 20, 21, 22, 27, 28,833, 834, 2010 ,2011, 2031, 2583, 2628, 2646, 2723], true, layer);
         layer.resizeWorld();
-
-        // layer.debug = true;
 
         // SOUND
         gameOver = new Audio('assets/soundEffects/smb_gameover.wav');
@@ -61,7 +54,7 @@ var level1 = {
         again.fixedToCamera = true;
         again.visible = false;
 
-        // BACK TO MENY
+        // BACK TO MENU
         var menu = game.add.text(350, 170, 'Exit', { font: '32px Arial', fill: '#fff' });
         menu.fixedToCamera = true;
         menu.visible = false;
@@ -153,7 +146,6 @@ var level1 = {
         player.animations.add('left', [8, 9, 10], 10, true);
 
         game.camera.follow(player);
-
         cursors = game.input.keyboard.createCursorKeys();
     },
 
@@ -202,7 +194,7 @@ var level1 = {
             player.body.velocity.y = -250;
             jumpTimer = game.time.now + 750;
         }
-        if (life == 0 ) {
+        if (life === 0 ) {
             this.gameOver();
         }
     },
@@ -211,7 +203,7 @@ var level1 = {
         coin.kill();
         game.sound.play('coin');
         score += 10;
-        scoreText.text = 'Score: ' + score;
+        scoreText.text = 'score: ' + score;
     },
 
     goombaOverlap: function(player, goomba) {
@@ -222,6 +214,8 @@ var level1 = {
             goomba.body.enable = false;
             player.body.velocity.y = -80;
             game.time.events.add(Phaser.Timer.SECOND, function() {
+                score += 10;
+                scoreText.text = 'score: ' + score;
                 goomba.kill();
             });
         } else {
