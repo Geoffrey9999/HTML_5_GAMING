@@ -114,7 +114,7 @@ var level1 = {
         // END MAP
         end = game.add.group();
         end.enableBody = true;
-        map.createFromObjects('end', 'finish', 1, 0, true, false, end);
+        map.createFromObjects('end', 'finish', 0, 0, true, false, end);
         end.setAll('body.gravity', 0);
 
         // COINS
@@ -266,11 +266,7 @@ var level1 = {
     },
 
     render: function() {
-
-        // game.debug.text(game.time.physicsElapsed, 32, 32);
-        // game.debug.body(player);
-        // game.debug.bodyInfo(end, 3, 400);
-        game.debug.bodyInfo(player, 3, 400);
+        // game.debug.bodyInfo(player, 3, 400);
 
     },
 };

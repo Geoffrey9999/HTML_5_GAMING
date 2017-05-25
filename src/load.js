@@ -38,7 +38,7 @@ var loadState = {
     },
 
     create: function() {
-        game.state.start('boss1');
+        game.state.start('menu');
     },
 
 }
