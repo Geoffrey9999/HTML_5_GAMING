@@ -12,11 +12,13 @@ var score = 0;
 var scoreText;
 var star = [];
 var i = 0;
+var gameOver
+var die;
 
 var level1 = {
 
     create: function() {
-
+        game.sound.play('main', true);
         // game.events.onBloomOver = new Phaser.Signal();
 
         game.stage.backgroundColor = '#5c94fc';
@@ -39,10 +41,18 @@ var level1 = {
 
         // layer.debug = true;
 
+        // SOUND
+        gameOver = new Audio('assets/soundEffects/smb_gameover.wav');
+        die = new Audio('assets/soundEffects/smb_mariodie.wav');
+        pause = new Audio('assets/soundEffects/smb_pause.wav');
+        clear = new Audio('assets/soundEffects/smb_stage_clear.wav');
+
         // PAUSE
         pause_label = game.add.text(720, 0, 'Pause', { font: '24px Arial', fill: '#fff' });
         pause_label.inputEnabled = true;
+        pause_label.fixedToCamera = true;
         pause_label.events.onInputUp.add(function() {
+            pause.play();
             game.paused = true;
             var again = game.add.text(300, 120, 'Try again ?', { font: '32px Arial', fill: '#fff' });
             again.inputEnabled = true;
@@ -56,6 +66,16 @@ var level1 = {
                 game.paused = false;
                 game.state.start('menu');
             });
+            var continues = game.add.text(310, 70, 'Continue', { font: '32px Arial', fill: '#fff' });
+            continues.inputEnabled = true;
+            continues.events.onInputUp.add(function() {
+                again.destroy();
+                menu.destroy();
+                continues.destroy();
+                game.paused = false;
+                pause.play();
+            });
+
         });
 
         // SCORE
@@ -112,11 +132,9 @@ var level1 = {
         game.camera.follow(player);
 
         cursors = game.input.keyboard.createCursorKeys();
-
     },
 
     update: function() {
-
         game.physics.arcade.collide(player, layer);
         game.physics.arcade.collide(goombas, layer);
         game.physics.arcade.collide(coins, layer);
@@ -157,10 +175,10 @@ var level1 = {
         }
 
         if (cursors.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
+            game.sound.play('jump');
             player.body.velocity.y = -250;
             jumpTimer = game.time.now + 750;
         }
-
         if (life == 0 ) {
             this.gameOver();
         }
@@ -168,12 +186,14 @@ var level1 = {
 
     coinOverlap: function(player, coin) {
         coin.kill();
+        game.sound.play('coin');
         score += 10;
         scoreText.text = 'Score: ' + score;
     },
 
     goombaOverlap: function(player, goomba) {
         if (player.body.touching.down) {
+            game.sound.play('kick');
             goomba.animations.stop();
             goomba.frame = 2;
             goomba.body.enable = false;
@@ -182,6 +202,7 @@ var level1 = {
                 goomba.kill();
             });
         } else {
+            game.sound.play('hit');
             star[life - 1].destroy();
             goomba.kill();
             return life--;
@@ -193,6 +214,11 @@ var level1 = {
         player.body.enable = false;
         player.animations.stop();
         game.paused = true;
+        die.play();
+        setTimeout(function() {
+            game.paused = false;
+            location.reload();
+        }, 2600);
     },
 
     dead: function(player, holes) {
@@ -202,12 +228,23 @@ var level1 = {
             player.animations.stop();
             game.time.events.add(Phaser.Timer.SECOND * 0, function() {
                 game.paused = true;
+                gameOver.play();
+                setTimeout(function() {
+                    game.paused = false;
+                    location.reload();
+                }, 4000);
             });
         }
     },
 
     finishLine: function(player, end) {
-        game.state.start('boss1');
+        clear.play();
+        game.paused = true;
+        player.frame = 4;
+        setTimeout(function() {
+            game.paused = false;
+            game.state.start('boss1');
+        }, 6000);
     },
 
     render: function() {

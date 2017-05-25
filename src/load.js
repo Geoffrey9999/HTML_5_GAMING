@@ -22,6 +22,15 @@ var loadState = {
         game.load.image('castle_png', 'assets/games/Mario/boss1/bowsers-castle.gif');
         game.load.spritesheet('bowser', 'assets/games/Mario/sprite/bowsers.png', 48, 58);
         game.load.spritesheet('flame', 'assets/games/Mario/boss1/flame.gif', 34, 34);
+
+        //SOUNDS
+        game.load.audio('kick','assets/soundEffects/smb_kick.wav');
+        game.load.audio('jump','assets/soundEffects/smb_jump-small.wav');
+        game.load.audio('coin','assets/soundEffects/smb_coin.wav');
+        game.load.audio('chat', 'assets/soundEffects/smas_chat.wav');
+        game.load.audio('main','assets/soundEffects/main.mp3');
+        game.load.audio('title', 'assets/soundEffects/title.mp3');
+        game.load.audio('hit', 'assets/soundEffects/hit.wav');
     },
 
     create: function() {

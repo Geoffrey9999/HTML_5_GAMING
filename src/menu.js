@@ -3,6 +3,8 @@ var map;
 MainMenu = {
 
     create: function() {
+        game.sound.play('chat');
+        game.sound.play('title');
         game.scale.pageAlignHorizontally = true;
         game.stage.backgroundColor = '#5c94fc';
         game.scale.pageAlignVertically = true
@@ -17,6 +19,7 @@ MainMenu = {
     },
 
     actionOnClick: function() {
+        game.sound.stopAll(); 
         game.state.start('level1');
     },
 }
