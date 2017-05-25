@@ -23,6 +23,7 @@ var boss1 = {
         this.map.addTilesetImage('bowsers-castle', 'castle_png');
 
         this.layer = this.map.createLayer('background');
+        this.layer = this.map.createLayer('bowser');
         this.layer = this.map.createLayer('world');
 
         this.layer.map.setCollision([865, 866, 867], true, this.layer);
