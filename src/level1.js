@@ -39,16 +39,24 @@ var level1 = {
 
         // layer.debug = true;
 
-        // stars = game.add.sprite(16, 0, 'life');
-        // stars.frame = 18;
-
-        // game.physics.arcade.enable(bowser);
-        // bowser.body.immovable = true;
-        // bowser.body.gravity.y = 570;
-        // bowser.body.setSize(32, 40, 8, 8)
-        // bowser.body.collideWorldBounds = true;
-        // bowser.animations.add('breath', [1, 2]);
-        // bowser.animations.play('breath', 3, true);
+        // PAUSE
+        pause_label = game.add.text(720, 0, 'Pause', { font: '24px Arial', fill: '#fff' });
+        pause_label.inputEnabled = true;
+        pause_label.events.onInputUp.add(function() {
+            game.paused = true;
+            var again = game.add.text(300, 120, 'Try again ?', { font: '32px Arial', fill: '#fff' });
+            again.inputEnabled = true;
+            again.events.onInputUp.add(function() {
+                game.paused = false;
+                game.state.restart();
+            });
+            var menu = game.add.text(350, 170, 'Exit', { font: '32px Arial', fill: '#fff' });
+            menu.inputEnabled = true;
+            menu.events.onInputUp.add(function() {
+                game.paused = false;
+                game.state.start('menu');
+            });
+        });
 
         // SCORE
         scoreText = game.add.text(0, 16, 'score: 0', { fontSize: '12px', fill: '#000' });
