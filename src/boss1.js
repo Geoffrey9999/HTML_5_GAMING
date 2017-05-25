@@ -147,7 +147,7 @@ var boss1 = {
     render: function() {
         // game.debug.text(game.time.physicsElapsed, 32, 32);
         // game.debug.body(player);
-        // game.debug.body(bowser);
+        game.debug.body(bowser);
         // game.debug.body(flame);
         // game.debug.bodyInfo(end, 3, 400);
         game.debug.bodyInfo(player, 3, 400);

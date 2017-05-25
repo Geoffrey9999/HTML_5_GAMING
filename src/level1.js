@@ -5,6 +5,11 @@ var player;
 var facing = 'right';
 var jumpTimer = 0;
 var cursors;
+var life = 3;
+var count = 0;
+var bool = true;
+var score = 0;
+var scoreText;
 
 var level1 = {
 
@@ -29,6 +34,28 @@ var level1 = {
         layer.resizeWorld();
 
         // layer.debug = true;
+
+        // stars = game.add.sprite(16, 0, 'life');
+        // stars.frame = 18;
+
+        // game.physics.arcade.enable(bowser);
+        // bowser.body.immovable = true;
+        // bowser.body.gravity.y = 570;
+        // bowser.body.setSize(32, 40, 8, 8)
+        // bowser.body.collideWorldBounds = true;
+        // bowser.animations.add('breath', [1, 2]);
+        // bowser.animations.play('breath', 3, true);
+
+        // SCORE
+        scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '12px', fill: '#000' });
+         scoreText.fixedToCamera = true;
+
+        // STAR
+        for (var i = 0 ; i < life ; i++) {
+            star = game.add.sprite(count, 0, 'life', 18);
+            count += 16;
+        }
+        star.fixedToCamera = true;
 
         // HOLES
         holes = game.add.group();
@@ -113,7 +140,6 @@ var level1 = {
                 } else {
                     player.frame = 0;
                 }
-
                 facing = 'idle';
             }
         }
@@ -122,10 +148,16 @@ var level1 = {
             player.body.velocity.y = -250;
             jumpTimer = game.time.now + 750;
         }
+
+        if (life == 0 ) {
+            this.gameOver();
+        }
     },
 
     coinOverlap: function(player, coin) {
         coin.kill();
+        score += 10;
+   scoreText.text = 'Score: ' + score;
     },
 
     goombaOverlap: function(player, goomba) {
@@ -138,13 +170,31 @@ var level1 = {
                 goomba.kill();
             });
         } else {
-            player.frame = 6;
-            player.body.enable = false;
-            player.animations.stop();
-            game.time.events.add(Phaser.Timer.SECOND * 0, function() {
-                game.paused = true;
-            });
+console.log(star);
+            star.destroy(2);
+            console.log(life);
+            goomba.kill();
+            return life--;
+            // console.log('dans le edlse');
+            // console.log(life);
+                // goomba.kill();
+            // player.frame = 6;
+            // player.body.enable = false;
+            // player.animations.stop();
+            // game.time.events.add(Phaser.Timer.SECOND * 2, function() {
+// life -= 1;
+// console.log('pkoi');
+                // console.log(life);
+                // game.paused = true;
+            // });
         }
+    },
+
+    gameOver: function() {
+        player.frame = 6;
+        player.body.enable = false;
+        player.animations.stop();
+         game.paused = true;
     },
 
     dead: function(player, holes) {

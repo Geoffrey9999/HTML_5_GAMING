@@ -2,6 +2,9 @@ var loadState = {
 
     preload: function() {
 
+        //LIFE
+        game.load.spritesheet('life', 'assets/games/Mario/world1/super_mario.png', 16, 16);
+
         //LEVEL 1
         game.load.tilemap('level1', 'assets/games/Mario/world1/world1.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('map1', 'assets/games/Mario/world1/super_mario.png');
