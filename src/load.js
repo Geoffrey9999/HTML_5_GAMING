@@ -2,6 +2,10 @@ var loadState = {
 
     preload: function() {
 
+        //MAIN MENU
+        game.load.image('mainTitle', 'assets/mainMenu/menu.jpg');
+        game.load.spritesheet('button', 'assets/mainMenu/button.png', 200, 72);
+
         //LIFE
         game.load.spritesheet('life', 'assets/games/Mario/world1/super_mario.png', 16, 16);
 
@@ -21,7 +25,7 @@ var loadState = {
     },
 
     create: function() {
-        game.state.start('level1');
+        game.state.start('menu');
     },
 
 }

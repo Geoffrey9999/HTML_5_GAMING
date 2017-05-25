@@ -51,22 +51,14 @@ var level1 = {
         // bowser.animations.play('breath', 3, true);
 
         // SCORE
-        scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '12px', fill: '#000' });
+        scoreText = game.add.text(0, 16, 'score: 0', { fontSize: '12px', fill: '#000' });
         scoreText.fixedToCamera = true;
 
         // STAR
-        // star = game.add.group();
-
-        // for (var i = 0; i < life; i++){
-        //     star.create(count, 0, 'life', 18);
-        //     count += 18;
-        // }
-
-
         for (i = 0 ; i < life ; i++) {
-        star[i] = game.add.sprite(count, 0, 'life', 18);
-        count += 16;
-        star[i].fixedToCamera = true;
+            star[i] = game.add.sprite(count, 0, 'life', 18);
+            count += 16;
+            star[i].fixedToCamera = true;
         }
 
         // HOLES
