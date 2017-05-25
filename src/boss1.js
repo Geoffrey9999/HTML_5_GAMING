@@ -6,6 +6,7 @@ var facing = 'right';
 var jumpTimer = 0;
 var cursors;
 var bool = true;
+var end = true;
 var flame = null;
 
 var boss1 = {
@@ -27,7 +28,6 @@ var boss1 = {
         this.layer.resizeWorld();
 
         // this.layer.debug = true;
-
         game.physics.arcade.gravity.y = 110;
 
         // MARIO
@@ -60,9 +60,6 @@ var boss1 = {
         game.physics.arcade.overlap(player, flame, this.dead);
         game.physics.arcade.collide(flame, this.layer);
 
-
-        // game.physics.arcade.overlap(player, trapps, this.enableFlamme);
-        //
         player.body.velocity.x = 0;
 
         if (cursors.left.isDown) {
@@ -98,7 +95,7 @@ var boss1 = {
             jumpTimer = game.time.now + 750;
         }
 
-        if (player.x > 450 && bool) {
+        if (player.x > 450 && bool && end) {
             bool = false;
             this.enableFlamme();
         }
@@ -116,6 +113,7 @@ var boss1 = {
     },
 
     touch: function(player, bowser) {
+        end = false;
         if (player.body.touching.down) {
             bowser.animations.stop();
             bowser.animations.add('dead', [45, 46, 47]);
@@ -123,8 +121,9 @@ var boss1 = {
             bowser.body.setSize(32, 20, 8, 20)
             // bowser.body.enable = false;
             bowser.body.velocity.y = -80;
-            game.time.events.add(Phaser.Timer.SECOND * 1, function() {
+            game.time.events.add(Phaser.Timer.SECOND * 5, function() {
                 bowser.kill();
+                game.state.start('level1');
             });
         } else {
             player.frame = 6;
