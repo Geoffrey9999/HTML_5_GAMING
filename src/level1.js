@@ -14,6 +14,10 @@ var star = [];
 var i = 0;
 var gameOver
 var die;
+// var pause_label;
+// var again;
+// var menu;
+// var continues;
 
 var level1 = {
 
@@ -49,33 +53,52 @@ var level1 = {
 
         // PAUSE
         pause_label = game.add.text(720, 0, 'Pause', { font: '24px Arial', fill: '#fff' });
-        pause_label.inputEnabled = true;
         pause_label.fixedToCamera = true;
-        pause_label.events.onInputUp.add(function() {
-            pause.play();
-            game.paused = true;
-            var again = game.add.text(300, 120, 'Try again ?', { font: '32px Arial', fill: '#fff' });
-            again.inputEnabled = true;
-            again.events.onInputUp.add(function() {
-                game.paused = false;
-                game.state.restart();
-            });
-            var menu = game.add.text(350, 170, 'Exit', { font: '32px Arial', fill: '#fff' });
-            menu.inputEnabled = true;
-            menu.events.onInputUp.add(function() {
-                game.paused = false;
-                game.state.start('menu');
-            });
-            var continues = game.add.text(310, 70, 'Continue', { font: '32px Arial', fill: '#fff' });
-            continues.inputEnabled = true;
-            continues.events.onInputUp.add(function() {
-                again.destroy();
-                menu.destroy();
-                continues.destroy();
-                game.paused = false;
-                pause.play();
-            });
+        pause_label.inputEnabled = true;
 
+        // TRY AGAIN
+        var again = game.add.text(300, 120, 'Try again ?', { font: '32px Arial', fill: '#fff' });
+        again.fixedToCamera = true;
+        again.visible = false;
+
+        // BACK TO MENY
+        var menu = game.add.text(350, 170, 'Exit', { font: '32px Arial', fill: '#fff' });
+        menu.fixedToCamera = true;
+        menu.visible = false;
+
+        // CONTINUE
+        var continues = game.add.text(310, 70, 'Continue', { font: '32px Arial', fill: '#fff' });
+        continues.fixedToCamera = true;
+        continues.visible = false;
+
+        pause_label.events.onInputUp.add(function() {
+            if (!game.paused) {
+                pause_label.inputEnabled = false;
+                pause.play();
+                game.paused = true;
+                again.visible = true;
+                again.inputEnabled = true;
+                again.events.onInputUp.add(function() {
+                    game.paused = false;
+                    game.state.restart();
+                });
+                menu.visible = true;
+                menu.inputEnabled = true;
+                menu.events.onInputUp.add(function() {
+                    game.paused = false;
+                    game.state.start('menu');
+                });
+                continues.visible = true;
+                continues.inputEnabled = true;
+                pause_label.inputEnabled = true;
+                continues.events.onInputUp.add(function() {
+                    again.kill();
+                    menu.kill();
+                    continues.kill();
+                    game.paused = false;
+                    pause.play();
+                });
+            }
         });
 
         // SCORE
@@ -242,6 +265,7 @@ var level1 = {
         game.paused = true;
         player.frame = 4;
         setTimeout(function() {
+            game.sound.stopAll();
             game.paused = false;
             game.state.start('boss1');
         }, 6000);

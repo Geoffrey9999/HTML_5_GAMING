@@ -8,11 +8,13 @@ var cursors;
 var bool = true;
 var end = true;
 var flame = null;
+var music;
+var die;
 
 var boss1 = {
 
     create: function() {
-
+        music = game.sound.play('castle');
         game.stage.backgroundColor = '#0000';
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true
@@ -26,6 +28,9 @@ var boss1 = {
 
         this.layer.map.setCollision([865, 866, 867], true, this.layer);
         this.layer.resizeWorld();
+
+        //SOUND
+        die = new Audio('assets/soundEffects/smb_mariodie.wav');
 
         // this.layer.debug = true;
         game.physics.arcade.gravity.y = 110;
@@ -55,7 +60,9 @@ var boss1 = {
         // PAUSE
         pause_label = game.add.text(720, 0, 'Pause', { font: '24px Arial', fill: '#fff' });
         pause_label.inputEnabled = true;
+        pause_label.fixedToCamera = true;
         pause_label.events.onInputUp.add(function() {
+            pause.play();
             game.paused = true;
             var again = game.add.text(300, 120, 'Try again ?', { font: '32px Arial', fill: '#fff' });
             again.inputEnabled = true;
@@ -68,6 +75,15 @@ var boss1 = {
             menu.events.onInputUp.add(function() {
                 game.paused = false;
                 game.state.start('menu');
+            });
+            var continues = game.add.text(310, 70, 'Continue', { font: '32px Arial', fill: '#fff' });
+            continues.inputEnabled = true;
+            continues.events.onInputUp.add(function() {
+                again.destroy();
+                menu.destroy();
+                continues.destroy();
+                game.paused = false;
+                pause.play();
             });
         });
     },
@@ -110,6 +126,7 @@ var boss1 = {
         }
 
         if (cursors.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
+            game.sound.play('jump');
             player.body.velocity.y = -250;
             jumpTimer = game.time.now + 750;
         }
@@ -122,6 +139,7 @@ var boss1 = {
 
     enableFlamme: function() {
         setTimeout(function() {
+            game.sound.play('fire');
             flame = game.add.sprite(850, 288, 'flame');
             game.physics.arcade.enable(flame);
             flame.body.velocity.x = -150;
@@ -134,13 +152,16 @@ var boss1 = {
     touch: function(player, bowser) {
         end = false;
         if (player.body.touching.down) {
+            game.sound.play('dead');
+            music.volume = 0;
+            game.sound.play('end');
             bowser.animations.stop();
             bowser.animations.add('dead', [45, 46, 47]);
             bowser.animations.play('dead', 3, true);
             bowser.body.setSize(32, 20, 8, 20)
-            // bowser.body.enable = false;
             bowser.body.velocity.y = -80;
             game.time.events.add(Phaser.Timer.SECOND * 5, function() {
+                game.sound.stopAll();
                 bowser.kill();
                 game.state.start('level1');
             });
@@ -150,6 +171,12 @@ var boss1 = {
             player.animations.stop();
             game.time.events.add(Phaser.Timer.SECOND * 0, function() {
                 game.paused = true;
+                die.play();
+                setTimeout(function(){
+                    music.volume = 0;
+                    game.paused = false;
+                    game.state.restart();
+                }, 3500)
             });
         }
     },
@@ -166,7 +193,7 @@ var boss1 = {
     render: function() {
         // game.debug.text(game.time.physicsElapsed, 32, 32);
         // game.debug.body(player);
-        game.debug.body(bowser);
+        // game.debug.body(bowser);
         // game.debug.body(flame);
         // game.debug.bodyInfo(end, 3, 400);
         game.debug.bodyInfo(player, 3, 400);

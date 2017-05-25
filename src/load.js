@@ -27,10 +27,14 @@ var loadState = {
         game.load.audio('kick','assets/soundEffects/smb_kick.wav');
         game.load.audio('jump','assets/soundEffects/smb_jump-small.wav');
         game.load.audio('coin','assets/soundEffects/smb_coin.wav');
+        game.load.audio('hit', 'assets/soundEffects/hit.wav');
         game.load.audio('chat', 'assets/soundEffects/smas_chat.wav');
+        game.load.audio('fire', 'assets/soundEffects/smb_bowserfire.wav');
+        game.load.audio('dead', 'assets/soundEffects/smb_bowserfalls.wav');
+        game.load.audio('end','assets/soundEffects/smb_stage_clear.wav')
         game.load.audio('main','assets/soundEffects/main.mp3');
         game.load.audio('title', 'assets/soundEffects/title.mp3');
-        game.load.audio('hit', 'assets/soundEffects/hit.wav');
+        game.load.audio('castle', 'assets/soundEffects/castle.mp3');
     },
 
     create: function() {
