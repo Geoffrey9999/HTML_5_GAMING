@@ -42,7 +42,6 @@ var level1 = {
         map.createFromObjects('end', 'finish', 1, 0, true, false, end);
         end.setAll('body.gravity', 0);
 
-
         // COINS
         coins = game.add.group();
         coins.enableBody = true;

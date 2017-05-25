@@ -5,6 +5,8 @@ var player;
 var facing = 'right';
 var jumpTimer = 0;
 var cursors;
+var bool = true;
+var flame = null;
 
 var boss1 = {
 
@@ -16,7 +18,6 @@ var boss1 = {
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         this.map = game.add.tilemap('boss1');
-
         this.map.addTilesetImage('bowsers-castle', 'castle_png');
 
         this.layer = this.map.createLayer('background');
@@ -50,23 +51,18 @@ var boss1 = {
         bowser.body.collideWorldBounds = true;
         bowser.animations.add('breath', [1, 2]);
         bowser.animations.play('breath', 3, true);
-
-        // HAMMER
-        hammer = game.add.sprite(160, 0, 'hammer');
-        game.physics.arcade.enable(hammer);
-        hammer.animations.add('launch', [48]);
-        hammer.body.setSize(20, 20, 8, 8)
-        hammer.animations.play('launch', 3, true);
-        hammer.body.gravity.y = 570;
-        hammer.body.collideWorldBounds = true;
     },
 
     update: function() {
         game.physics.arcade.collide(player, this.layer);
         game.physics.arcade.collide(bowser, this.layer);
         game.physics.arcade.collide(player, bowser, this.touch);
+        game.physics.arcade.overlap(player, flame, this.dead);
+        game.physics.arcade.collide(flame, this.layer);
 
-        hammer.body.velocity.x = -150;
+
+        // game.physics.arcade.overlap(player, trapps, this.enableFlamme);
+        //
         player.body.velocity.x = 0;
 
         if (cursors.left.isDown) {
@@ -101,6 +97,22 @@ var boss1 = {
             player.body.velocity.y = -250;
             jumpTimer = game.time.now + 750;
         }
+
+        if (player.x > 450 && bool) {
+            bool = false;
+            this.enableFlamme();
+        }
+    },
+
+    enableFlamme: function() {
+        setTimeout(function() {
+            flame = game.add.sprite(850, 288, 'flame');
+            game.physics.arcade.enable(flame);
+            flame.body.velocity.x = -150;
+            flame.body.setSize(20, 20, 8, 8);
+            bool = true;
+        },
+        1500);
     },
 
     touch: function(player, bowser) {
@@ -124,12 +136,20 @@ var boss1 = {
         }
     },
 
-    render: function() {
+    dead: function(player) {
+        player.frame = 6;
+        player.body.enable = false;
+        player.animations.stop();
+        game.time.events.add(Phaser.Timer.SECOND * 0, function() {
+            game.paused = true;
+        });
+    },
 
+    render: function() {
         // game.debug.text(game.time.physicsElapsed, 32, 32);
         // game.debug.body(player);
-        game.debug.body(bowser)
-        game.debug.body(hammer)
+        // game.debug.body(bowser);
+        // game.debug.body(flame);
         // game.debug.bodyInfo(end, 3, 400);
         game.debug.bodyInfo(player, 3, 400);
 

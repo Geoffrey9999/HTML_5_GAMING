@@ -14,7 +14,7 @@ var loadState = {
         game.load.tilemap('boss1', 'assets/games/Mario/boss1/boss1.json', null, Phaser.Tilemap.TILED_JSON );
         game.load.image('castle_png', 'assets/games/Mario/boss1/bowsers-castle.gif');
         game.load.spritesheet('bowser', 'assets/games/Mario/sprite/bowsers.png', 48, 58);
-        game.load.spritesheet('hammer', 'assets/games/Mario/sprite/bowsers.png', 50, 56);
+        game.load.spritesheet('flame', 'assets/games/Mario/boss1/flame.gif', 34, 34);
     },
 
     create: function() {
